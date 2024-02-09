@@ -1,0 +1,108 @@
+#include <iostream>
+#include <stack>
+#include <cctype> 
+
+using namespace std;
+
+class ExpressionTreeNode {
+public:
+    char data;
+    ExpressionTreeNode* left;
+    ExpressionTreeNode* right;
+
+    ExpressionTreeNode(char value) : data(value), left(nullptr), right(nullptr) {}
+};
+
+class ExpressionTree {
+private:
+    ExpressionTreeNode* root;
+
+    bool isOperator(char c) {
+        return (c == '+' || c == '-' || c == '*' || c == '/');
+    }
+
+public:
+    ExpressionTree() : root(nullptr) {}
+
+    void constructFromPostfix(string postfix) {
+        stack<ExpressionTreeNode*> st;
+
+        for (char c : postfix) {
+            if (isOperator(c)) {
+                ExpressionTreeNode* newNode = new ExpressionTreeNode(c);
+                newNode->right = st.top();
+                st.pop();
+                newNode->left = st.top();
+                st.pop();
+                st.push(newNode);
+            } else {
+                st.push(new ExpressionTreeNode(c));
+            }
+        }
+
+        root = st.top();
+    }
+
+    ExpressionTreeNode* getRoot() const {
+        return root;
+    }
+
+    
+    void recursiveInOrder() const {
+        recursiveInOrder(root);
+        cout << endl;
+    }
+
+    void recursivePreOrder() const {
+        recursivePreOrder(root);
+        cout << endl;
+    }
+
+    void recursivePostOrder() const {
+        recursivePostOrder(root);
+        cout << endl;
+    }
+
+private:
+    void recursiveInOrder(ExpressionTreeNode* node) const {
+        if (node) {
+            recursiveInOrder(node->left);
+            cout << node->data << " ";
+            recursiveInOrder(node->right);
+        }
+    }
+
+    void recursivePreOrder(ExpressionTreeNode* node) const {
+        if (node) {
+            cout << node->data << " ";
+            recursivePreOrder(node->left);
+            recursivePreOrder(node->right);
+        }
+    }
+
+    void recursivePostOrder(ExpressionTreeNode* node) const {
+        if (node) {
+            recursivePostOrder(node->left);
+            recursivePostOrder(node->right);
+            cout << node->data << " ";
+        }
+    }
+};
+
+int main() {
+    ExpressionTree tree;
+
+   
+    tree.constructFromPostfix("ab+c*d-");
+
+    cout << "Recursive In-Order Traversal: ";
+    tree.recursiveInOrder();
+
+    cout << "Recursive Pre-Order Traversal: ";
+    tree.recursivePreOrder();
+
+    cout << "Recursive Post-Order Traversal: ";
+    tree.recursivePostOrder();
+
+    return 0;
+}
