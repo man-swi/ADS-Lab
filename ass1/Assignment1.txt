@@ -1,0 +1,86 @@
+#include<bits/stdc++.h>
+#include<iostream>
+using namespace  std;
+class node
+{
+    public:
+    int data;
+    node *left, *right;
+    
+    node(int data1)
+    {
+        data = data1;
+        left = right = NULL;
+    
+    }
+};
+
+void preorder(node* temp)
+{
+    if(temp==NULL)
+    return;
+    
+    cout<<temp->data<<" ";
+    preorder(temp->left);
+    preorder(temp->right);
+}
+
+void inorder(node* temp)
+{
+    if(temp==NULL)
+    return;
+    
+    inorder(temp->left);
+    cout<< temp->data<<" ";
+    inorder(temp->right);
+}
+
+void leafnode(node* temp)
+{
+    if(temp==NULL)
+    return;
+    if(temp->left==NULL && temp->right==NULL)
+    {
+        cout<<temp->data<<" ";
+
+    }
+    
+    if(temp->left)
+    leafnode(temp->left);
+    if(temp->right)
+    leafnode(temp->right);
+    
+}
+int depth(node* temp)
+{
+    if(temp==NULL)
+    return 0;
+    else{
+        int ldepth=depth(temp->left);
+        int rdepth=depth(temp->right);
+        
+        if(ldepth>rdepth)
+        return ldepth+1;
+        else
+        return rdepth+1;
+    }
+}
+
+int main()
+{
+    node* root=new node(10);
+    root->left=new node(16);
+    root->right=new node(55);
+    root->left->left=new node(73);
+    root->right->left =new node(35);
+    cout<<"preordal traversal of tree"<<endl;
+    preorder(root);
+    cout<<endl<<"inorder traversal of tree"<<endl;
+    inorder(root);
+    cout<<endl<<"leafnode of tree"<<endl;
+    leafnode(root);
+    int height=depth(root);
+    cout<<endl<<"depth of the tree is:"<<height-1;
+    
+    return 0;
+}
